@@ -46,6 +46,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private Animator armsAnimator;
         private int weaponHolding;
+        private bool isAttackingLeft = false;
+        private bool isAttackingRight = false;
+
 
         // Use this for initialization
         private void Start()
@@ -102,6 +105,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     armsAnimator.SetBool("isHoldingKnife", false);
                     break;
             }
+            if (isAttackingLeft) {
+                armsAnimator.SetTrigger("attackLeft");
+                isAttackingLeft = false;
+            }
+            if (isAttackingRight) {
+                armsAnimator.SetTrigger("attackRight");
+                isAttackingRight = false;
+            }
         }
 
         private void switchWeapons() {
@@ -115,6 +126,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     weapon.SetActive(false);
                 }
             }
+        }
+
+        private void attack() {
+            
         }
 
 
@@ -255,6 +270,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (Input.GetKey(KeyCode.Alpha1) && weaponHolding != 1)
             {
                 weaponHolding = 1;
+            }
+
+            if (Input.GetMouseButtonDown(0) && isAttackingLeft == false) {
+                isAttackingLeft = true;
+            }
+
+            if (Input.GetMouseButtonDown(1) && isAttackingRight == false)
+            {
+                isAttackingRight = true;
             }
 #endif
             // set the desired speed to be walking or running
