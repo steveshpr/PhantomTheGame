@@ -29,6 +29,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
         [SerializeField] private GameObject[] weapons;
+        [SerializeField] private float attackDelay;
+        [SerializeField] private float drawingWeaponDelay;
+        [SerializeField] private float grabbingDelay;
 
         private Camera m_Camera;
         private bool m_Jump;
@@ -45,9 +48,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private AudioSource m_AudioSource;
 
         private Animator armsAnimator;
+
         private int weaponHolding;
-        private bool isAttackingLeft = false;
-        private bool isAttackingRight = false;
+        private float nextAttackableTime = 0.0f;
+
+        private bool wantsToAttackLeft = false;
+        private bool wantsToAttackRight = false;
 
 
         // Use this for initialization
@@ -105,13 +111,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     armsAnimator.SetBool("isHoldingKnife", false);
                     break;
             }
-            if (isAttackingLeft) {
+            if (wantsToAttackLeft) {
                 armsAnimator.SetTrigger("attackLeft");
-                isAttackingLeft = false;
+                wantsToAttackLeft = false;
             }
-            if (isAttackingRight) {
+            if (wantsToAttackRight) {
                 armsAnimator.SetTrigger("attackRight");
-                isAttackingRight = false;
+                wantsToAttackRight = false;
             }
         }
 
@@ -263,22 +269,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // keep track of whether or not the character is walking or running
             m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
 
-            if (Input.GetKey(KeyCode.Alpha3) && weaponHolding != 3) {
+            if (Input.GetKeyDown(KeyCode.Alpha3) && weaponHolding != 3) {
                 weaponHolding = 3;
             }
 
-            if (Input.GetKey(KeyCode.Alpha1) && weaponHolding != 1)
+            if (Input.GetKeyDown(KeyCode.Alpha1) && weaponHolding != 1)
             {
                 weaponHolding = 1;
             }
 
-            if (Input.GetMouseButtonDown(0) && isAttackingLeft == false) {
-                isAttackingLeft = true;
+            if (Input.GetMouseButtonDown(0) && Time.time > nextAttackableTime)
+            {
+                wantsToAttackLeft = true;
+                nextAttackableTime = Time.time + attackDelay;
             }
 
-            if (Input.GetMouseButtonDown(1) && isAttackingRight == false)
+            if (Input.GetMouseButtonDown(1) && Time.time > nextAttackableTime)
             {
-                isAttackingRight = true;
+                wantsToAttackRight = true;
+                nextAttackableTime = Time.time + attackDelay;
             }
 #endif
             // set the desired speed to be walking or running

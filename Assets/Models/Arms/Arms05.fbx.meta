@@ -1200,8 +1200,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Swing01
       takeName: Swing01
-      firstFrame: 0
-      lastFrame: 30
+      firstFrame: 13.200001
+      lastFrame: 23.2
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -1394,8 +1394,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Swing02
       takeName: Swing02
-      firstFrame: 0
-      lastFrame: 26
+      firstFrame: 5.1
+      lastFrame: 20.4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
