@@ -55,6 +55,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     Destroy(comp);
                 }
             }
+            //GetComponent<Rigidbody>().isKinematic = true;
         }
 
 
