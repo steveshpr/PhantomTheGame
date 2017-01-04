@@ -11,9 +11,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     {
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
-        public Transform target;                                    // target to aim for
-
-        private Collider mainCollider;
+        
+        private float visionDistance;
+        private float visionHeight;
+        private Transform target;
+        private CapsuleCollider mainCollider;
+        private SphereCollider mainVision;
         private Array ragdoll;
 
 
@@ -27,15 +30,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	        agent.updatePosition = true;
 
             
-            mainCollider = GetComponent<Collider>();
+            mainCollider = GetComponent<CapsuleCollider>();
+            mainVision = GetComponent<SphereCollider>();
+            visionDistance = mainVision.radius;
+            visionHeight = mainVision.center.y;
 
             ragdoll = GetComponentsInChildren<Collider>();
             foreach (Collider collider in ragdoll)
             {
                 collider.enabled = false;
+                collider.gameObject.GetComponent<Rigidbody>().useGravity = false;
             }
 
             mainCollider.enabled = true;
+            mainVision.enabled = true;
 
             MainBus.Instance.Subscribe(this);
         }
@@ -57,15 +65,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             foreach (Collider collider in ragdoll)
             {
                 collider.enabled = true;
+                collider.gameObject.GetComponent<Rigidbody>().useGravity = true;
             }
 
         }
 
-
+        
         private void Update()
         {
+            
             if (target != null)
+            {
                 agent.SetDestination(target.position);
+            }
+            else
+            {
+                agent.SetDestination(transform.position);
+            }
 
             if (agent.remainingDistance > agent.stoppingDistance)
                 character.Move(agent.desiredVelocity, false, false);
@@ -84,9 +100,36 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             this.target = target;
         }
 
+        public void OnTriggerStay(Collider coll) {
+            if (coll.gameObject.layer == 8) {
+                Vector3 eyePosition = transform.position + Vector3.up * visionHeight;
+                //Debug.Log(eyePosition);
+                RaycastHit hit;
+                //Debug.DrawRay(eyePosition, coll.transform.position - eyePosition, Color.red);
+                int layerMask = 1 << 10;
+                layerMask = ~layerMask;
+                if (Physics.Raycast(eyePosition, (coll.transform.position - eyePosition).normalized, out hit, visionDistance, layerMask)) {
+                    if (hit.collider.gameObject.layer == 8) {
+                        MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
+                    }
+                    else{
+                        MainBus.Instance.PublishEvent(new SpottedEvent(null));
+                    }
+                }
+            }
+        }
+
+        public void OnTriggerExit(Collider coll)
+        {
+            if (coll.gameObject.layer == 8)
+            {
+                MainBus.Instance.PublishEvent(new SpottedEvent(null));
+            }
+        }
+
         public void OnEvent(SpottedEvent evt)
         {
-            Debug.Log(evt.target);
+            target = evt.targetTransform;
         }
     }
 }

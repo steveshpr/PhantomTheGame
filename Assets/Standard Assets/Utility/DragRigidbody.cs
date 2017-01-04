@@ -26,7 +26,9 @@ namespace Phantom.Utility
 
             // We need to actually hit an object
             RaycastHit hit = new RaycastHit();
-            int layerMask = 1 << 8;
+            int layerMaskPlayer = 1 << 8;
+            int layerMaskEnviroment = 1 << 9;
+            int layerMask = layerMaskPlayer | layerMaskEnviroment;
             layerMask = ~layerMask;
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,

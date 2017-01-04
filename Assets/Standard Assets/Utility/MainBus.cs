@@ -114,9 +114,9 @@ namespace Phantom.Utility.MessageBus
     }
 
     public class SpottedEvent {
-        public FirstPersonController target;
-        public SpottedEvent(FirstPersonController target) {
-            this.target = target;
+        public Transform targetTransform;
+        public SpottedEvent(Transform target) {
+            targetTransform = target;
         }
     }
 }
