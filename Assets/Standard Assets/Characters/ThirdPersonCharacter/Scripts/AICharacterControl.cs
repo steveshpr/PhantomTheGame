@@ -40,11 +40,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void die() {
 
-            foreach (Collider collider in ragdoll)
-            {
-                collider.enabled = true;
-            }
-            mainCollider.enabled = false;
+            
 
             Destroy(GetComponent("AICharacterControl"));
             Destroy(GetComponent("ThirdPersonCharacter"));
@@ -54,6 +50,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 {
                     Destroy(comp);
                 }
+            }
+
+            foreach (Collider collider in ragdoll)
+            {
+                collider.enabled = true;
             }
             //GetComponent<Rigidbody>().isKinematic = true;
         }
