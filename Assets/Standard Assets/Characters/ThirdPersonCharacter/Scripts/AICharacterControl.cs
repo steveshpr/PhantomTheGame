@@ -102,14 +102,40 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         public void OnTriggerStay(Collider coll) {
             if (coll.gameObject.layer == 8) {
+
                 Vector3 eyePosition = transform.position + Vector3.up * visionHeight;
-                //Debug.Log(eyePosition);
+                Vector3 rayDirection = (coll.transform.position - eyePosition);
+                rayDirection.y = 0;
+                rayDirection.Normalize();
+                
+                Vector3 leftLimit = (transform.forward - transform.right).normalized;
+                Vector3 rightLimit = (transform.forward + transform.right).normalized;
+
+
+                float angleLeft = Vector3.Dot(leftLimit.normalized, rayDirection.normalized);
+                float angleRight = Vector3.Dot(rightLimit.normalized, rayDirection.normalized);
+
+                bool inFov = angleLeft >= 0 && angleRight >= 0;
+
+                //test rays
+                /*
+                Debug.DrawRay(eyePosition, leftLimit * visionDistance, Color.green);
+                Debug.DrawRay(eyePosition, rightLimit * visionDistance, Color.green);
+                if (inFov)
+                {
+                    Debug.DrawRay(eyePosition, rayDirection * visionDistance, Color.red);
+                }
+                else {
+                    Debug.DrawRay(eyePosition, rayDirection * visionDistance, Color.blue);
+                }*/
+                //Debug.Log((transform.forward - rayDirection).normalized);
+                //Debug.Log((transform.forward + transform.right).normalized);
+
                 RaycastHit hit;
-                //Debug.DrawRay(eyePosition, coll.transform.position - eyePosition, Color.red);
                 int layerMask = 1 << 10;
                 layerMask = ~layerMask;
-                if (Physics.Raycast(eyePosition, (coll.transform.position - eyePosition).normalized, out hit, visionDistance, layerMask)) {
-                    if (hit.collider.gameObject.layer == 8) {
+                if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask)) {
+                    if (inFov && hit.collider.gameObject.layer == 8) {
                         MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
                     }
                     else{
