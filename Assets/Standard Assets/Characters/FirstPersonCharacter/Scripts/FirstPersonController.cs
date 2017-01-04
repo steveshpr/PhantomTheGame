@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
+using Phantom.Utility.MessageBus;
 using Random = UnityEngine.Random;
 
 namespace UnityStandardAssets.Characters.FirstPerson
@@ -71,6 +72,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_MouseLook.Init(transform , m_Camera.transform);
 
             armsAnimator = GetComponentInChildren<Animator>();
+
         }
 
 
@@ -112,10 +114,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     break;
             }
             if (wantsToAttackLeft) {
+                attack();
                 armsAnimator.SetTrigger("attackLeft");
                 wantsToAttackLeft = false;
             }
             if (wantsToAttackRight) {
+                attack();
                 armsAnimator.SetTrigger("attackRight");
                 wantsToAttackRight = false;
             }
@@ -135,7 +139,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
         private void attack() {
-            
         }
 
 
@@ -329,7 +332,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 return;
             }
-            body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+            body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
         }
     }
 }

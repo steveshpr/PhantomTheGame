@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using Phantom.Utility.MessageBus;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
     [RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))]
     [RequireComponent(typeof (ThirdPersonCharacter))]
 
-    public class AICharacterControl : MonoBehaviour
+    public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>
     {
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
@@ -35,7 +36,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
 
             mainCollider.enabled = true;
-            
+
+            MainBus.Instance.Subscribe(this);
         }
 
         private void die() {
@@ -56,7 +58,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 collider.enabled = true;
             }
-            //GetComponent<Rigidbody>().isKinematic = true;
+
         }
 
 
@@ -80,6 +82,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public void SetTarget(Transform target)
         {
             this.target = target;
+        }
+
+        public void OnEvent(SpottedEvent evt)
+        {
+            Debug.Log(evt.target);
         }
     }
 }
