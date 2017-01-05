@@ -19,6 +19,8 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private SphereCollider mainVision;
         private Array ragdoll;
 
+        private bool spotted = false;
+
 
         private void Start()
         {
@@ -135,9 +137,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 layerMask = ~layerMask;
                 if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask)) {
                     if (inFov && hit.collider.gameObject.layer == 8) {
+                        spotted = true;
                         MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
                     }
                     else{
+                        spotted = false;
                         MainBus.Instance.PublishEvent(new SpottedEvent(null));
                     }
                 }
@@ -148,6 +152,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             if (coll.gameObject.layer == 8)
             {
+                spotted = false;
                 MainBus.Instance.PublishEvent(new SpottedEvent(null));
             }
         }
@@ -160,8 +165,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public void OnEvent(ChokeEnemy evt)
         {
             if (evt.target.name == name) {
-                //Debug.Log(name + ": its me!");
-                die();
+                if (!spotted)
+                {
+                    die();
+                }
             }
         }
     }
