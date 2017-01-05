@@ -7,7 +7,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))]
     [RequireComponent(typeof (ThirdPersonCharacter))]
 
-    public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>, ISubscriber<ChokeEnemy>
+    public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>, ISubscriber<ChokeEnemy>, ISubscriber<LostSightEvent>
     {
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
@@ -51,7 +51,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
 
         private void die() {
-            MainBus.Instance.PublishEvent(new SpottedEvent(null));
+            MainBus.Instance.PublishEvent(new LostSightEvent());
 
             Destroy(GetComponent("AICharacterControl"));
             Destroy(GetComponent("ThirdPersonCharacter"));
@@ -119,7 +119,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 bool inFov = angleLeft >= 0 && angleRight >= 0;
 
                 //test rays
-                /*
+                
                 Debug.DrawRay(eyePosition, leftLimit * visionDistance, Color.green);
                 Debug.DrawRay(eyePosition, rightLimit * visionDistance, Color.green);
                 if (inFov)
@@ -128,7 +128,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }
                 else {
                     Debug.DrawRay(eyePosition, rayDirection * visionDistance, Color.blue);
-                }*/
+                }
                 //Debug.Log((transform.forward - rayDirection).normalized);
                 //Debug.Log((transform.forward + transform.right).normalized);
 
@@ -142,7 +142,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     }
                     else{
                         spotted = false;
-                        MainBus.Instance.PublishEvent(new SpottedEvent(null));
+                        MainBus.Instance.PublishEvent(new LostSightEvent());
                     }
                 }
             }
@@ -153,7 +153,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             if (coll.gameObject.layer == 8)
             {
                 spotted = false;
-                MainBus.Instance.PublishEvent(new SpottedEvent(null));
+                MainBus.Instance.PublishEvent(new LostSightEvent());
             }
         }
 
@@ -169,6 +169,19 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 {
                     die();
                 }
+            }
+        }
+
+        public void OnEvent(LostSightEvent evt)
+        {
+            if (spotted)
+            {
+                MainBus.Instance.PublishEvent(new SpottedEvent(target));
+            }
+            else
+            {
+                spotted = false;
+                target = null;
             }
         }
     }

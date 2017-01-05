@@ -121,6 +121,10 @@ namespace Phantom.Utility.MessageBus
         }
     }
 
+    public class LostSightEvent
+    {
+    }
+
     public class TryingToDragAlive {
         public RaycastHit hit;
         public TryingToDragAlive(RaycastHit hit) {
