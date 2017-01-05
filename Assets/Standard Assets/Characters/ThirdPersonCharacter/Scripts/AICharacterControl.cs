@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Phantom.Utility.MessageBus;
+using UnityEngine.AI;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -11,7 +12,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     {
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
-        
+        public float walkRadius;
+
+
         private float visionDistance;
         private float visionHeight;
         private Transform target;
@@ -71,23 +74,45 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         }
 
-        
         private void Update()
         {
             
+
             if (target != null)
             {
                 agent.SetDestination(target.position);
             }
             else
             {
-                agent.SetDestination(transform.position);
+                //agent.SetDestination(transform.position);
+                
+                if (agent.remainingDistance < 1f)
+                {
+                    //Debug.Log("paling");
+                    Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * walkRadius;
+                    randomDirection += transform.position;
+                    NavMeshHit hit;
+                    NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1);
+                    Vector3 finalPosition = hit.position;
+                    agent.SetDestination(finalPosition);
+                }
             }
 
             if (agent.remainingDistance > agent.stoppingDistance)
-                character.Move(agent.desiredVelocity, false, false);
-            else
-                character.Move(Vector3.zero, false, false);
+            {
+                if (target != null)
+                {
+                    character.Move(agent.desiredVelocity, true, false, false);
+                }
+                else {
+                    character.Move(agent.desiredVelocity, false, false, false);
+                }
+            }
+            else{
+                character.Move(Vector3.zero,false, false, false);
+            }
+            
+                
 
             if (Input.GetKeyUp(KeyCode.End))
             {
