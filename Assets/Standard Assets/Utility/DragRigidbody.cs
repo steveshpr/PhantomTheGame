@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Phantom.Utility.MessageBus;
 
 namespace Phantom.Utility
 {
@@ -11,6 +12,7 @@ namespace Phantom.Utility
         const float k_Drag = 10.0f;
         const float k_AngularDrag = 5.0f;
         const float k_Distance = 0.0002f;
+        const float dragRange = 5f;
         const bool k_AttachToCenterOfMass = false;
 
         private SpringJoint m_SpringJoint;
@@ -22,6 +24,12 @@ namespace Phantom.Utility
             {
                 return;
             }
+
+            StartDragging();
+        }
+
+        private void StartDragging() {
+            
             var mainCamera = FindCamera();
 
             // We need to actually hit an object
@@ -32,15 +40,13 @@ namespace Phantom.Utility
             layerMask = ~layerMask;
             if (
                 !Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition).origin,
-                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, 10,
+                                 mainCamera.ScreenPointToRay(Input.mousePosition).direction, out hit, dragRange,
                                  layerMask))
             {
                 Debug.Log("not hit");
                 return;
             }
 
-
-            
 
             // We need to hit a rigidbody that is not kinematic
             if (!hit.rigidbody || hit.rigidbody.isKinematic)
@@ -49,6 +55,15 @@ namespace Phantom.Utility
                 return;
             }
 
+            // check if the target is alive
+            SphereCollider targetVision = hit.rigidbody.gameObject.GetComponent<SphereCollider>(); // for enemy with vision
+            if (targetVision && targetVision.isTrigger)
+            {
+                Debug.Log("alive?");
+                //tell finding a alive thing
+                MainBus.Instance.PublishEvent(new TryingToDragAlive(hit));
+                return;
+            }
 
             if (!m_SpringJoint)
             {
@@ -68,7 +83,6 @@ namespace Phantom.Utility
 
             StartCoroutine("DragObject", hit.distance);
         }
-
 
         private IEnumerator DragObject(float distance)
         {

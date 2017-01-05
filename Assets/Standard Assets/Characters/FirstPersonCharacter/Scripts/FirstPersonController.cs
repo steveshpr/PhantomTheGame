@@ -9,7 +9,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof (CharacterController))]
     [RequireComponent(typeof (AudioSource))]
-    public class FirstPersonController : MonoBehaviour
+    public class FirstPersonController : MonoBehaviour, ISubscriber<TryingToDragAlive>
     {
         [SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
@@ -51,7 +51,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Animator armsAnimator;
 
         private int weaponHolding;
-        private float nextAttackableTime = 0.0f;
+        private float nextActionableTime = 0.0f;
 
         private bool wantsToAttackLeft = false;
         private bool wantsToAttackRight = false;
@@ -73,6 +73,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             armsAnimator = GetComponentInChildren<Animator>();
 
+            MainBus.Instance.Subscribe(this);
         }
 
 
@@ -281,16 +282,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 weaponHolding = 1;
             }
 
-            if (Input.GetMouseButtonDown(0) && Time.time > nextAttackableTime)
+            if (Input.GetMouseButtonDown(0) && Time.time > nextActionableTime)
             {
                 wantsToAttackLeft = true;
-                nextAttackableTime = Time.time + attackDelay;
+                nextActionableTime = Time.time + attackDelay;
             }
 
-            if (Input.GetMouseButtonDown(1) && Time.time > nextAttackableTime)
+            if (Input.GetMouseButtonDown(1) && Time.time > nextActionableTime)
             {
                 wantsToAttackRight = true;
-                nextAttackableTime = Time.time + attackDelay;
+                nextActionableTime = Time.time + attackDelay;
             }
 #endif
             // set the desired speed to be walking or running
@@ -333,6 +334,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 return;
             }
             body.AddForceAtPosition(m_CharacterController.velocity * 0.1f, hit.point, ForceMode.Impulse);
+        }
+
+        public void OnEvent(TryingToDragAlive evt)
+        {
+            //Debug.Log(evt.hit.collider.gameObject.name);
+            MainBus.Instance.PublishEvent(new ChokeEnemy(evt.hit.collider.gameObject));
         }
     }
 }

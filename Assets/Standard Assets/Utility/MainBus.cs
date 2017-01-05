@@ -113,10 +113,26 @@ namespace Phantom.Utility.MessageBus
         }
     }
 
+    //Event Classes
     public class SpottedEvent {
         public Transform targetTransform;
         public SpottedEvent(Transform target) {
             targetTransform = target;
+        }
+    }
+
+    public class TryingToDragAlive {
+        public RaycastHit hit;
+        public TryingToDragAlive(RaycastHit hit) {
+            this.hit = hit;
+        }
+    }
+
+    public class ChokeEnemy
+    {
+        public GameObject target;
+        public ChokeEnemy(GameObject target) {
+            this.target = target;
         }
     }
 }
