@@ -60,6 +60,27 @@ namespace Phantom.Utility.MessageBus
             }
         }
 
+        //not working yet?
+        public void UnSubscribe(object subscriber) {
+
+            lock (_lockObj)
+            {
+
+                var subscriberTypes =
+                subscriber.GetType()
+                .GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriber<>));
+
+                WeakReference weakRef = new WeakReference(subscriber);
+
+                foreach (var subscriberType in subscriberTypes)
+                {
+                    List<WeakReference> subscribers = GetSubscriberList(subscriberType);
+                    subscribers.Remove(weakRef);
+                }
+            }
+        }
+
         public void Subscribe(object subscriber)
         {
             lock (_lockObj)

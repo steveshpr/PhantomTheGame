@@ -10,7 +10,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
     public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>, ISubscriber<ChokeEnemy>, ISubscriber<LostSightEvent>
     {
-        public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
+        public NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public float walkRadius;
 
@@ -27,8 +27,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Start()
         {
+
             // get the components on the object we need ( should not be null due to require component so no need to check )
-            agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
+            agent = GetComponentInChildren<NavMeshAgent>();
             character = GetComponent<ThirdPersonCharacter>();
 
 	        agent.updateRotation = false;
@@ -70,6 +71,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             {
                 collider.enabled = true;
                 collider.gameObject.GetComponent<Rigidbody>().useGravity = true;
+                collider.gameObject.layer = 11;
             }
 
         }
@@ -127,7 +129,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
 
         public void OnTriggerStay(Collider coll) {
-            if (coll.gameObject.layer == 8) {
+            if (coll.gameObject.layer == 8 || coll.gameObject.layer == 11) {
 
                 Vector3 eyePosition = transform.position + Vector3.up * visionHeight;
                 Vector3 rayDirection = (coll.transform.position - eyePosition);
@@ -154,22 +156,31 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 else {
                     Debug.DrawRay(eyePosition, rayDirection * visionDistance, Color.blue);
                 }
-                //Debug.Log((transform.forward - rayDirection).normalized);
-                //Debug.Log((transform.forward + transform.right).normalized);
 
-                RaycastHit hit;
-                int layerMask = 1 << 10;
-                layerMask = ~layerMask;
-                if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask)) {
-                    if (inFov && hit.collider.gameObject.layer == 8) {
+                if (inFov) {
+                    RaycastHit hit;
+                    int layerMask = 1 << 10;
+                    layerMask = ~layerMask;
+                    if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask))
+                    {
+                        if (hit.collider.gameObject.layer == 8)
+                        {
+                            spotted = true;
+                            MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
+                        }
+                    }
+                    else if (!spotted){
+                        Debug.Log("Found Sthg");
                         spotted = true;
                         MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
                     }
-                    else{
-                        spotted = false;
-                        MainBus.Instance.PublishEvent(new LostSightEvent());
-                    }
                 }
+                else
+                {
+                    spotted = false;
+                    MainBus.Instance.PublishEvent(new LostSightEvent());
+                }
+                //}
             }
         }
 
@@ -205,7 +216,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else
             {
-                spotted = false;
                 target = null;
             }
         }
