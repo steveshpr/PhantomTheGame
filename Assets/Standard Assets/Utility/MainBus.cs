@@ -147,9 +147,9 @@ namespace Phantom.Utility.MessageBus
     }
 
     public class TryingToDragAlive {
-        public RaycastHit hit;
-        public TryingToDragAlive(RaycastHit hit) {
-            this.hit = hit;
+        public GameObject target;
+        public TryingToDragAlive(GameObject target) {
+            this.target = target;
         }
     }
 

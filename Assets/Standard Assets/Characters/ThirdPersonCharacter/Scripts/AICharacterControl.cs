@@ -170,7 +170,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                         }
                     }
                     else if (!spotted){
-                        Debug.Log("Found Sthg");
                         spotted = true;
                         MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
                     }
