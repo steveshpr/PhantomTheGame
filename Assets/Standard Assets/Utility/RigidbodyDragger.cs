@@ -22,7 +22,7 @@ namespace Phantom.Utility
         private void Update()
         {
             // Make sure the user pressed "e" down
-            if (!CrossPlatformInputManager.GetButton("Choke") || m_SpringJoint != null)
+            if (CrossPlatformInputManager.GetAxis("InteractR") < 0.4f || m_SpringJoint != null)
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace Phantom.Utility
             m_SpringJoint.connectedBody.mass = 20.0f;
             m_SpringJoint.connectedBody.drag = k_Drag;
             m_SpringJoint.connectedBody.angularDrag = k_AngularDrag;
-            while (CrossPlatformInputManager.GetButton("Choke"))
+            while (CrossPlatformInputManager.GetAxis("InteractR") >= 0.4f)
             {
                 m_SpringJoint.transform.position = transform.position;
                 yield return null;
