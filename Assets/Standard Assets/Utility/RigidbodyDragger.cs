@@ -39,7 +39,7 @@ namespace Phantom.Utility
             layerMask = ~layerMask;
             if (target == null)
             {
-                Debug.Log("not hit");
+                //Debug.Log("not hit");
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace Phantom.Utility
             // We need to hit a rigidbody that is not kinematic
             if (!target.GetComponent<Rigidbody>() || target.GetComponent<Rigidbody>().isKinematic)
             {
-                Debug.Log(target.name);
+                //Debug.Log(target.name);
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace Phantom.Utility
             SphereCollider targetVision = target.GetComponent<SphereCollider>(); // for enemy with vision
             if (targetVision && targetVision.isTrigger)
             {
-                Debug.Log("alive?");
+                //Debug.Log("alive?");
                 //tell finding a alive thing
                 MainBus.Instance.PublishEvent(new TryingToDragAlive(target));
                 return;

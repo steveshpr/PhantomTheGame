@@ -8,7 +8,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (UnityEngine.AI.NavMeshAgent))]
     [RequireComponent(typeof (ThirdPersonCharacter))]
 
-    public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>, ISubscriber<ChokeEnemy>, ISubscriber<LostSightEvent>
+    public class AICharacterControl : MonoBehaviour, ISubscriber<SpottedEvent>, ISubscriber<ChokeEnemy>, ISubscriber<LostSightEvent>, ISubscriber<KillEnemy>
     {
         public NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
@@ -200,6 +200,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public void OnEvent(ChokeEnemy evt)
         {
             if (evt.target.name == name) {
+                if (!spotted)
+                {
+                    die();
+                }
+            }
+        }
+
+        public void OnEvent(KillEnemy evt)
+        {
+            if (evt.target.name == name)
+            {
                 if (!spotted)
                 {
                     die();

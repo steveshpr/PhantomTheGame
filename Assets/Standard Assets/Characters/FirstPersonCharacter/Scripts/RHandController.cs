@@ -8,6 +8,8 @@ public class RHandController : MonoBehaviour {
     [SerializeField]private OVRInput.Controller controller;
     [SerializeField]private float sensitivity;
 
+    [SerializeField]private GameObject sword;
+
     // Update is called once per frame
     void Update () {
         Vector3 sourcePosition = OVRInput.GetLocalControllerPosition(controller);
@@ -18,9 +20,14 @@ public class RHandController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision col)
     {
+        
         if (col.gameObject.layer != 8 && col.gameObject.layer != 9)
         {
-            Debug.Log(col.gameObject.name);
+            if (sword.activeSelf)
+            {
+                sword.GetComponent<Sword>().target = col.gameObject;
+                return;
+            }
             GetComponent<Renderer>().material.color = Color.red;
             GetComponent<RigidbodyDragger>().target = col.gameObject;
         }
@@ -30,6 +37,11 @@ public class RHandController : MonoBehaviour {
     {
         if (col.gameObject.layer != 8 && col.gameObject.layer != 9)
         {
+            if (sword.activeSelf)
+            {
+                sword.GetComponent<Sword>().target = null;
+                return;
+            }
             GetComponent<Renderer>().material.color = Color.white;
             GetComponent<RigidbodyDragger>().target = null;
         }

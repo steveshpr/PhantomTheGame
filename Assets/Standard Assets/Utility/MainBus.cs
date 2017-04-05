@@ -160,4 +160,12 @@ namespace Phantom.Utility.MessageBus
             this.target = target;
         }
     }
+
+    public class KillEnemy {
+        public GameObject target;
+        public KillEnemy(GameObject target)
+        {
+            this.target = target;
+        }
+    }
 }
