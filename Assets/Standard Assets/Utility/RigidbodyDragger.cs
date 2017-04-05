@@ -22,7 +22,7 @@ namespace Phantom.Utility
         private void Update()
         {
             // Make sure the user pressed "e" down
-            if (CrossPlatformInputManager.GetAxis("InteractR") < 0.4f || m_SpringJoint != null)
+            if (CrossPlatformInputManager.GetAxis("InteractR") < 0.4f || m_SpringJoint)
             {
                 return;
             }
