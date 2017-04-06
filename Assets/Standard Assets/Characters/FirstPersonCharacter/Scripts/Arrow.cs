@@ -63,5 +63,7 @@ public class Arrow : MonoBehaviour {
         GetComponent<Rigidbody>().isKinematic = false;
         //GetComponent<Collider>().isTrigger = false;
         GetComponent<Rigidbody>().AddForce(origin.GetComponent<Arrow>().refGroup.transform.forward * strength * 3000);
+        GetComponent<FlyingArrow>().enabled = true;
+        enabled = false;
     }
 }
