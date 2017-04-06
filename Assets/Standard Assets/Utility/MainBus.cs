@@ -168,4 +168,12 @@ namespace Phantom.Utility.MessageBus
             this.target = target;
         }
     }
+    public class HUDSetText
+    {
+        public string name;
+        public HUDSetText(string name)
+        {
+            this.name = name;
+        }
+    }
 }

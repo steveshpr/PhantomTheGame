@@ -9,11 +9,14 @@ public class Arrow : MonoBehaviour {
     [SerializeField]private GameObject refGroup;
     [SerializeField]private GameObject bow;
 
-    private bool aimable = false;
-    private bool aimming = false;
-    private float strength = -1f;
+    private bool aimable;
+    private bool aimming;
+    private float strength;
 
     void Start () {
+        aimable = false;
+        aimming = false;
+        strength = -1f;
     }
 	
 	// Update is called once per frame
@@ -29,6 +32,9 @@ public class Arrow : MonoBehaviour {
         if (aimable && !aimming && bow.activeSelf) {
             if (strength >= 0.3f) {
                 Debug.Log("fire! stength: " + strength);
+                GameObject arrow = Instantiate(gameObject);
+                arrow.GetComponent<Arrow>().fire(gameObject, strength);
+                gameObject.SetActive(false);
             }
             strength = -1f;
         }
@@ -47,5 +53,15 @@ public class Arrow : MonoBehaviour {
         {
             aimable = false;
         }
+    }
+
+    public void fire(GameObject origin, float strength) {
+        transform.position = origin.transform.position;
+        transform.forward = origin.transform.forward;
+        Physics.IgnoreCollision(GetComponent<Collider>(), origin.GetComponent<Collider>());
+        transform.localScale = origin.transform.lossyScale;
+        GetComponent<Rigidbody>().isKinematic = false;
+        //GetComponent<Collider>().isTrigger = false;
+        GetComponent<Rigidbody>().AddForce(origin.GetComponent<Arrow>().refGroup.transform.forward * strength * 3000);
     }
 }
