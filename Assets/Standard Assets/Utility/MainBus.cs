@@ -176,4 +176,15 @@ namespace Phantom.Utility.MessageBus
             this.name = name;
         }
     }
+
+    public class HUDSetIcon
+    {
+        public string name;
+        public string color;
+        public HUDSetIcon(string name, string color)
+        {
+            this.name = name;
+            this.color = color;
+        }
+    }
 }

@@ -26,9 +26,11 @@ public class RHDrawWeapon : MonoBehaviour
     {
         if (drawing)
         {
+            MainBus.Instance.PublishEvent(new HUDSetIcon(weapon.gameObject.name, "green"));
             if (CrossPlatformInputManager.GetAxis("HoldR") > 0.4f)
             {
-                if (!holding && count > 0){
+                if (!holding && count > 0)
+                {
                     holding = true;
                     weapon.SetActive(true);
                     count--;
@@ -36,7 +38,8 @@ public class RHDrawWeapon : MonoBehaviour
             }
             else
             {
-                if (holding){
+                if (holding)
+                {
                     holding = false;
                     weapon.SetActive(false);
                     count++;
@@ -47,23 +50,33 @@ public class RHDrawWeapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.Equals(hand) && !counterWeapon.activeSelf)
+        if (other.gameObject.Equals(hand))
         {
-            MainBus.Instance.PublishEvent(new HUDSetText(weapon.gameObject.name));
-            drawing = true;
-            if (weapon.activeSelf) {
-                holding = true;
+            if (!counterWeapon.activeSelf)
+            {
+                drawing = true;
+                if (weapon.activeSelf)
+                {
+                    holding = true;
+                }
+            }
+            else
+            {
+                MainBus.Instance.PublishEvent(new HUDSetIcon(weapon.gameObject.name, "red"));
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.Equals(hand) && !counterWeapon.activeSelf)
+        if (other.gameObject.Equals(hand))
         {
-            MainBus.Instance.PublishEvent(new HUDSetText(""));
-            drawing = false;
-            holding = false;
+            if (!counterWeapon.activeSelf)
+            {
+                drawing = false;
+                holding = false;
+            }
+            MainBus.Instance.PublishEvent(new HUDSetIcon(weapon.gameObject.name, "org"));
         }
     }
 }

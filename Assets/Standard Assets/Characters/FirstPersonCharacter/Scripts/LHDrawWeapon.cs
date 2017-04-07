@@ -19,6 +19,7 @@ public class LHDrawWeapon : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (drawing) {
+            MainBus.Instance.PublishEvent(new HUDSetIcon(weapon.gameObject.name, "green"));
             if (CrossPlatformInputManager.GetAxis("HoldL") > 0.4f){
                 weapon.SetActive(true);
             }
@@ -31,7 +32,6 @@ public class LHDrawWeapon : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.Equals(hand)) {
-            MainBus.Instance.PublishEvent(new HUDSetText(weapon.gameObject.name));
             drawing = true;
         }
     }
@@ -39,8 +39,8 @@ public class LHDrawWeapon : MonoBehaviour {
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.Equals(hand))
         {
-            MainBus.Instance.PublishEvent(new HUDSetText(""));
             drawing = false;
+            MainBus.Instance.PublishEvent(new HUDSetIcon(weapon.gameObject.name, "org"));
         }
     }
 }
