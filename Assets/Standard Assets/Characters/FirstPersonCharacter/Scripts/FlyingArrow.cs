@@ -1,16 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Phantom.Utility.MessageBus;
 
 public class FlyingArrow : MonoBehaviour {
 
-	// Use this for initialization
+    private int frameDelay = 2;
+    private bool active = true;
+    
 	void Start () {
-        Debug.Log("im flying!!");
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void FixedUpdate () {
+        if (frameDelay > 0) {
+            frameDelay--;
+            return;
+        }
+        gameObject.GetComponent<Collider>().isTrigger = false;
 	}
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.layer != 8 && col.gameObject.layer !=9) {
+            if (active)
+            {
+                active = false;
+                MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject));
+                enabled = false;
+            }
+        }
+    }
 }
