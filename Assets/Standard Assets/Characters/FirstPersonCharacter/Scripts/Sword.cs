@@ -26,7 +26,6 @@ public class Sword : MonoBehaviour {
         }
         if (target != null && speed >= 1f && coolDown == 0) {
             coolDown = 20;
-            Debug.Log("killing " + target.name);
             MainBus.Instance.PublishEvent(new KillEnemy(target));
         }
     }

@@ -31,7 +31,6 @@ public class Arrow : MonoBehaviour {
 
         if (aimable && !aimming && bow.activeSelf) {
             if (strength >= 0.3f) {
-                Debug.Log("fire! stength: " + strength);
                 GameObject arrow = Instantiate(gameObject);
                 arrow.GetComponent<Arrow>().fire(gameObject, strength);
                 gameObject.SetActive(false);

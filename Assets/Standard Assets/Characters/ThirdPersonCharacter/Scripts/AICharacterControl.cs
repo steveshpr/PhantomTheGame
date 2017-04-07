@@ -13,6 +13,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public float walkRadius;
+        public bool isStatic;
 
 
         private float visionDistance;
@@ -86,8 +87,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else
             {
-                //agent.SetDestination(transform.position);
-                
+                if(!isStatic)
                 if (agent.remainingDistance < 1f)
                 {
                     //Debug.Log("paling");
