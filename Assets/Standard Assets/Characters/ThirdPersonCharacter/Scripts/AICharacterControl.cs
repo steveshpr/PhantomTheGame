@@ -57,6 +57,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void die() {
             MainBus.Instance.PublishEvent(new LostSightEvent());
+            MainBus.Instance.PublishEvent(new EnemyDieEvent());
 
             Destroy(GetComponent("AICharacterControl"));
             Destroy(GetComponent("ThirdPersonCharacter"));

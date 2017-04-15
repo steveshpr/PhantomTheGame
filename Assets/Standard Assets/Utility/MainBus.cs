@@ -168,6 +168,10 @@ namespace Phantom.Utility.MessageBus
             this.target = target;
         }
     }
+
+    public class EnemyDieEvent {
+    }
+
     public class HUDSetText
     {
         public string name;

@@ -17,6 +17,7 @@ public class FlyingArrow : MonoBehaviour {
             return;
         }
         gameObject.GetComponent<Collider>().isTrigger = false;
+        gameObject.layer = 9;
 	}
 
     private void OnCollisionEnter(Collision col)
