@@ -209,12 +209,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         public void OnEvent(KillEnemy evt)
         {
-            if (evt.target.name == name)
+            try
             {
-                if (!spotted)
+                if (evt.target.name == name)
                 {
-                    die();
+                    if (!spotted)
+                    {
+                        die();
+                    }
                 }
+            }
+            catch (MissingReferenceException e) {
             }
         }
 

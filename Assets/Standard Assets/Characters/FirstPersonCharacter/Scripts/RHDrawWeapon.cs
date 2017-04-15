@@ -36,7 +36,7 @@ public class RHDrawWeapon : MonoBehaviour
                     count--;
                 }
             }
-            else
+            else if(CrossPlatformInputManager.GetButton("RCancel"))
             {
                 if (holding)
                 {

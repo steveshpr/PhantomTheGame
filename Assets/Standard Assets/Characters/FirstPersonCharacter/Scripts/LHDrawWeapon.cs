@@ -23,7 +23,7 @@ public class LHDrawWeapon : MonoBehaviour {
             if (CrossPlatformInputManager.GetAxis("HoldL") > 0.4f){
                 weapon.SetActive(true);
             }
-            else{
+            else if (CrossPlatformInputManager.GetButton("LCancel")){
                 weapon.SetActive(false);
             }
         }

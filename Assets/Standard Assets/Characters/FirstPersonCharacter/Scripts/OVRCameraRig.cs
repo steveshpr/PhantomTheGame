@@ -176,11 +176,15 @@ public class OVRCameraRig : MonoBehaviour
 
 		if (_centerEyeCamera == null || _leftEyeCamera == null || _rightEyeCamera == null)
 		{
-			_centerEyeCamera = centerEyeAnchor.GetComponent<Camera>();
-			_leftEyeCamera = leftEyeAnchor.GetComponent<Camera>();
-			_rightEyeCamera = rightEyeAnchor.GetComponent<Camera>();
+            int layerMask = ~(1 << 5);
+            _centerEyeCamera = centerEyeAnchor.GetComponent<Camera>();
+            _centerEyeCamera.cullingMask = layerMask;
+            _leftEyeCamera = leftEyeAnchor.GetComponent<Camera>();
+            _leftEyeCamera.cullingMask = layerMask;
+            _rightEyeCamera = rightEyeAnchor.GetComponent<Camera>();
+            _rightEyeCamera.cullingMask = layerMask;
 
-			if (_centerEyeCamera == null)
+            if (_centerEyeCamera == null)
 			{
 				_centerEyeCamera = centerEyeAnchor.gameObject.AddComponent<Camera>();
 				_centerEyeCamera.tag = "MainCamera";
