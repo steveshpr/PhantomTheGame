@@ -177,12 +177,16 @@ public class OVRCameraRig : MonoBehaviour
 		if (_centerEyeCamera == null || _leftEyeCamera == null || _rightEyeCamera == null)
 		{
             int layerMask = ~(1 << 5);
+            float near = 0.001f;
             _centerEyeCamera = centerEyeAnchor.GetComponent<Camera>();
             _centerEyeCamera.cullingMask = layerMask;
+            _centerEyeCamera.nearClipPlane = near;
             _leftEyeCamera = leftEyeAnchor.GetComponent<Camera>();
             _leftEyeCamera.cullingMask = layerMask;
+            _leftEyeCamera.nearClipPlane = near;
             _rightEyeCamera = rightEyeAnchor.GetComponent<Camera>();
             _rightEyeCamera.cullingMask = layerMask;
+            _rightEyeCamera.nearClipPlane = near;
 
             if (_centerEyeCamera == null)
 			{

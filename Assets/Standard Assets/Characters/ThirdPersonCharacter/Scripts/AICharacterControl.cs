@@ -164,7 +164,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     layerMask = ~layerMask;
                     if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask))
                     {
-                        if (hit.collider.gameObject.layer == 8)
+                        if (hit.collider.gameObject.layer == 12)
                         {
                             spotted = true;
                             MainBus.Instance.PublishEvent(new SpottedEvent(coll.transform));
