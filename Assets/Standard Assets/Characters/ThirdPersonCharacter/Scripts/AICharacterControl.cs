@@ -130,7 +130,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
 
         public void OnTriggerStay(Collider coll) {
-            if (coll.gameObject.layer == 8 || coll.gameObject.layer == 11) {
+            if (coll.gameObject.layer == 12 || coll.gameObject.layer == 11) {
 
                 Vector3 eyePosition = transform.position + Vector3.up * visionHeight;
                 Vector3 rayDirection = (coll.transform.position - eyePosition);
@@ -160,8 +160,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
                 if (inFov) {
                     RaycastHit hit;
-                    int layerMask = 1 << 10;
-                    layerMask = ~layerMask;
+                    int layerMask = ~((1 << 10) | (1 << 8));
                     if (Physics.Raycast(eyePosition, rayDirection, out hit, visionDistance, layerMask))
                     {
                         if (hit.collider.gameObject.layer == 12)
