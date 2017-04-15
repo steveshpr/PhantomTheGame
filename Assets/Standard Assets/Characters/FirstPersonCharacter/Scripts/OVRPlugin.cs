@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 internal static class OVRPlugin
 {
-	public static readonly System.Version wrapperVersion = OVRP_1_12_0.version;
+	public static readonly System.Version wrapperVersion = OVRP_1_13_0.version;
 
 	private static System.Version _version;
 	public static System.Version version
@@ -756,7 +756,7 @@ internal static class OVRPlugin
 	public static bool UpdateNodePhysicsPoses(int frameIndex, double predictionSeconds)
 	{
 		if (version >= OVRP_1_8_0.version)
-			return OVRP_1_8_0.ovrp_Update2(0, frameIndex, predictionSeconds) == Bool.True;
+			return OVRP_1_8_0.ovrp_Update2((int)Step.Physics, frameIndex, predictionSeconds) == Bool.True;
 
 		return false;
 	}
@@ -1522,5 +1522,10 @@ internal static class OVRPlugin
 
 		[DllImport(pluginName, CallingConvention = CallingConvention.Cdecl)]
 		public static extern ControllerState2 ovrp_GetControllerState2(uint controllerMask);
+	}
+
+	private static class OVRP_1_13_0
+	{
+		public static readonly System.Version version = new System.Version(1, 13, 0);
 	}
 }

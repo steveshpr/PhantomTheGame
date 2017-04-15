@@ -156,7 +156,6 @@ public class OVRPlayerController : MonoBehaviour
 
 	protected virtual void UpdateController()
 	{
-        Vector3 pos = OVRInput.GetLocalControllerPosition(OVRInput.GetActiveController());
 		if (useProfileData)
 		{
 			if (InitialPose == null)
@@ -462,7 +461,7 @@ public class OVRPlayerController : MonoBehaviour
 	/// </summary>
 	public void ResetOrientation()
 	{
-		if (HmdResetsY)
+		if (HmdResetsY && !HmdRotatesY)
 		{
 			Vector3 euler = transform.rotation.eulerAngles;
 			euler.y = InitialYRotation;

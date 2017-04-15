@@ -427,7 +427,7 @@ public class OVRManager : MonoBehaviour
 
 	/// <summary>
 	/// Gets or sets the eye texture format.
-	/// This feature is only for UNITY_5_6_OR_NEWER
+	/// This feature is only for UNITY_5_6_OR_NEWER On PC
 	/// </summary>
 	public static EyeTextureFormat eyeTextureFormat
 	{
@@ -568,12 +568,7 @@ public class OVRManager : MonoBehaviour
         chromatic = false;
 #endif
 
-		if (display == null)
-			display = new OVRDisplay();
-		if (tracker == null)
-			tracker = new OVRTracker();
-		if (boundary == null)
-			boundary = new OVRBoundary();
+        Initialize();
 
 		if (resetTrackerOnLoad)
 			display.RecenterPose();
@@ -582,8 +577,37 @@ public class OVRManager : MonoBehaviour
 		OVRPlugin.occlusionMesh = false;
 	}
 
+#if UNITY_EDITOR
+	private static bool _scriptsReloaded;
+
+	[UnityEditor.Callbacks.DidReloadScripts]
+	static void ScriptsReloaded()
+	{
+		_scriptsReloaded = true;
+	}
+#endif
+
+	void Initialize()
+	{
+		if (display == null)
+			display = new OVRDisplay();
+		if (tracker == null)
+			tracker = new OVRTracker();
+		if (boundary == null)
+			boundary = new OVRBoundary();
+	}
+
 	private void Update()
 	{
+#if UNITY_EDITOR
+		if (_scriptsReloaded)
+		{
+			_scriptsReloaded = false;
+			instance = this;
+			Initialize();
+		}
+#endif
+
 		if (OVRPlugin.shouldQuit)
 			Application.Quit();
 
