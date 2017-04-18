@@ -28,7 +28,7 @@ public class FlyingArrow : MonoBehaviour {
 
     }
 
-    private void OnCollisionEnter(Collision col)
+    private void OnCollisionStay(Collision col)
     {
         if (col.gameObject.layer != 12 && col.gameObject.layer !=9) {
             if (active)
@@ -43,6 +43,30 @@ public class FlyingArrow : MonoBehaviour {
                     MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
                 }
                 if (col.gameObject.layer == 8) {
+                    Debug.Log("wa");
+                }
+                enabled = false;
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.layer != 12 && col.gameObject.layer != 9)
+        {
+            if (active)
+            {
+                var rigidBody = gameObject.GetComponent<Rigidbody>();
+                active = false;
+                rigidBody.angularVelocity = Vector3.zero;
+                rigidBody.velocity = Vector3.zero;
+                rigidBody.isKinematic = true;
+                if (col.gameObject.layer == 10)
+                {
+                    MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
+                }
+                if (col.gameObject.layer == 8)
+                {
                     Debug.Log("wa");
                 }
                 enabled = false;

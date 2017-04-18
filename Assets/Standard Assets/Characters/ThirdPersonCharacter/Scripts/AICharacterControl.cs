@@ -237,7 +237,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     }
                 }
             }
-            catch (MissingReferenceException e) {
+            catch (MissingReferenceException) {
             }
         }
 
