@@ -14,6 +14,9 @@ namespace Phantom.HUD
         [SerializeField]private GameObject sword;
         [SerializeField]private GameObject arrow;
 
+        [SerializeField]private GameObject arrowCount;
+        [SerializeField]private GameObject arrowArea;
+
         [SerializeField]private Sprite arrowOrg;
         [SerializeField]private Sprite arrowGreen;
         [SerializeField]private Sprite arrowRed;
@@ -32,7 +35,7 @@ namespace Phantom.HUD
         // Update is called once per frame
         void Update()
         {
-
+            arrowCount.GetComponent<Text>().text = arrowArea.GetComponent<RHDrawWeapon>().count.ToString();
         }
 
         public void OnEvent(HUDSetText evt)

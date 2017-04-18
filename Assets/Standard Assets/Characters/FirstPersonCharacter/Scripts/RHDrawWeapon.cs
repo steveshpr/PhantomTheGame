@@ -11,7 +11,7 @@ public class RHDrawWeapon : MonoBehaviour
     [SerializeField]private GameObject hand;
     [SerializeField]private GameObject weapon;
     [SerializeField]private GameObject counterWeapon;
-    [SerializeField]private int count;
+    [SerializeField]public int count;
 
     private bool drawing = false;
     private bool holding = false;
