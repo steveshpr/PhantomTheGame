@@ -50,7 +50,6 @@ namespace Phantom.Utility
                 //check if target is arrow
                 if (target.name == "arrow(Clone)")
                 {
-                    Debug.Log("gotcha");
                     MainBus.Instance.PublishEvent(new PickArrowEvent(target));
                 }
                 return;

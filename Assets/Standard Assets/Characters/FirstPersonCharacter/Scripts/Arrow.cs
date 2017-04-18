@@ -14,9 +14,6 @@ public class Arrow : MonoBehaviour {
     private float strength;
 
     void Start () {
-        aimable = false;
-        aimming = false;
-        strength = -1f;
     }
 	
 	// Update is called once per frame
@@ -51,6 +48,16 @@ public class Arrow : MonoBehaviour {
         if (other.gameObject.Equals(LHand))
         {
             aimable = false;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (transform.parent && transform.parent.name == "arrowGroup") {
+            refGroup.transform.localRotation = new Quaternion(0.4f, 0f, 0f, 0.9f);
+            aimable = false;
+            aimming = false;
+            strength = -1f;
         }
     }
 
