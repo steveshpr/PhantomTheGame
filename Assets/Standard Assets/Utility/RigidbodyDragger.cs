@@ -16,7 +16,7 @@ namespace Phantom.Utility
         const float dragRange = 5f;
         const bool k_AttachToCenterOfMass = false;
 
-        private SpringJoint m_SpringJoint;
+        [HideInInspector]public SpringJoint m_SpringJoint;
         [HideInInspector]public GameObject target;
 
         private void Update()

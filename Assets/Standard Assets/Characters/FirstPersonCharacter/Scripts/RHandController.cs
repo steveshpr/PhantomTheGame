@@ -9,6 +9,7 @@ public class RHandController : MonoBehaviour {
     [SerializeField]private float sensitivity;
 
     [SerializeField]private GameObject sword;
+    [SerializeField]private GameObject arrow;
 
     // Update is called once per frame
     void Update () {
@@ -28,6 +29,10 @@ public class RHandController : MonoBehaviour {
                 sword.GetComponent<Sword>().target = col.gameObject;
                 return;
             }
+
+            if (arrow.activeSelf) {
+                return;
+            }
             GetComponent<Renderer>().material.color = Color.red;
             GetComponent<RigidbodyDragger>().target = col.gameObject;
         }
@@ -40,7 +45,6 @@ public class RHandController : MonoBehaviour {
             if (sword.activeSelf)
             {
                 sword.GetComponent<Sword>().target = null;
-                return;
             }
             GetComponent<Renderer>().material.color = Color.white;
             GetComponent<RigidbodyDragger>().target = null;

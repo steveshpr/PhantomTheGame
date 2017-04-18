@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Phantom.Utility.MessageBus;
 using UnityStandardAssets.CrossPlatformInput;
+using Phantom.Utility;
 
 public class RHDrawWeapon : MonoBehaviour
 {
@@ -14,11 +15,12 @@ public class RHDrawWeapon : MonoBehaviour
 
     private bool drawing = false;
     private bool holding = false;
+    private SpringJoint dragging;
 
     // Use this for initialization
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -52,7 +54,8 @@ public class RHDrawWeapon : MonoBehaviour
     {
         if (other.gameObject.Equals(hand))
         {
-            if (!counterWeapon.activeSelf)
+            var dragging = hand.GetComponent<RigidbodyDragger>().m_SpringJoint;
+            if (!counterWeapon.activeSelf && !dragging)
             {
                 drawing = true;
                 if (weapon.activeSelf)
