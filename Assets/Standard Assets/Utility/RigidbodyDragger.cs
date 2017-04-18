@@ -47,7 +47,12 @@ namespace Phantom.Utility
             // We need to hit a rigidbody that is not kinematic
             if (!target.GetComponent<Rigidbody>() || target.GetComponent<Rigidbody>().isKinematic)
             {
-                //Debug.Log(target.name);
+                //check if target is arrow
+                if (target.name == "arrow(Clone)")
+                {
+                    Debug.Log("gotcha");
+                    MainBus.Instance.PublishEvent(new PickArrowEvent(target));
+                }
                 return;
             }
 

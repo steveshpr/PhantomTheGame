@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Phantom.Utility;
+using Phantom.Utility.MessageBus;
+using System;
 
-public class RHandController : MonoBehaviour {
+public class RHandController : MonoBehaviour, ISubscriber<PickArrowEvent>{
 
     [SerializeField]private OVRInput.Controller controller;
     [SerializeField]private float sensitivity;
 
     [SerializeField]private GameObject sword;
     [SerializeField]private GameObject arrow;
+
+    private void Start()
+    {
+        MainBus.Instance.Subscribe(this);
+    }
 
     // Update is called once per frame
     void Update () {
@@ -48,6 +55,14 @@ public class RHandController : MonoBehaviour {
             }
             GetComponent<Renderer>().material.color = Color.white;
             GetComponent<RigidbodyDragger>().target = null;
+        }
+    }
+
+    public void OnEvent(PickArrowEvent evt)
+    {
+        if (!arrow.activeSelf) {
+            Destroy(evt.arrow);
+            arrow.SetActive(true);
         }
     }
 }

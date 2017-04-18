@@ -42,6 +42,9 @@ public class FlyingArrow : MonoBehaviour {
                 {
                     MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
                 }
+                if (col.gameObject.layer == 8) {
+                    Debug.Log("wa");
+                }
                 enabled = false;
             }
         }

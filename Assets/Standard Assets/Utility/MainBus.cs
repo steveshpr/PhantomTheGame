@@ -199,4 +199,10 @@ namespace Phantom.Utility.MessageBus
             this.color = color;
         }
     }
+    public class PickArrowEvent {
+        public GameObject arrow;
+        public PickArrowEvent(GameObject arrow) {
+            this.arrow = arrow;
+        }
+    }
 }
