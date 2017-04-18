@@ -197,7 +197,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                     spotted = false;
                     MainBus.Instance.PublishEvent(new LostSightEvent());
                 }
-                //}
             }
         }
 
