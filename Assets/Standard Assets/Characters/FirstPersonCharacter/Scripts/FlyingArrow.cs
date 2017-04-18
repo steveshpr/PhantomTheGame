@@ -6,7 +6,7 @@ using Phantom.Utility.MessageBus;
 public class FlyingArrow : MonoBehaviour {
 
     private int frameDelay = 2;
-    private bool active = true;
+    private bool active = false;
     
 	void Start () {
 	}
@@ -16,17 +16,32 @@ public class FlyingArrow : MonoBehaviour {
             frameDelay--;
             return;
         }
-        gameObject.GetComponent<Collider>().isTrigger = false;
-        gameObject.layer = 9;
-	}
+        if (!active)
+        {
+            active = true;
+            gameObject.GetComponent<Collider>().isTrigger = false;
+            gameObject.layer = 13;
+        }
+        if (transform.position.y >= 200 || transform.position.y <= -100) {
+            Destroy(gameObject);
+        }
+
+    }
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.layer != 8 && col.gameObject.layer !=9) {
+        if (col.gameObject.layer != 12 && col.gameObject.layer !=9) {
             if (active)
             {
+                var rigidBody = gameObject.GetComponent<Rigidbody>();
                 active = false;
-                MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject));
+                rigidBody.angularVelocity = Vector3.zero;
+                rigidBody.velocity = Vector3.zero;
+                rigidBody.isKinematic = true;
+                if (col.gameObject.layer == 10)
+                {
+                    MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
+                }
                 enabled = false;
             }
         }

@@ -163,9 +163,17 @@ namespace Phantom.Utility.MessageBus
 
     public class KillEnemy {
         public GameObject target;
+        public Transform transform;
+
         public KillEnemy(GameObject target)
         {
             this.target = target;
+        }
+
+        public KillEnemy(GameObject target, Transform transform)
+        {
+            this.target = target;
+            this.transform = transform;
         }
     }
 

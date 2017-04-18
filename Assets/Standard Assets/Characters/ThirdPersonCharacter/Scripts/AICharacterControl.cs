@@ -55,7 +55,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             MainBus.Instance.Subscribe(this);
         }
 
-        private void die() {
+
+        private void die()
+        {
+            die(null);
+        }
+
+        private void die(Transform killer) {
             MainBus.Instance.PublishEvent(new LostSightEvent());
             MainBus.Instance.PublishEvent(new EnemyDieEvent());
 
@@ -69,11 +75,23 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 }
             }
 
+            Collider closestPart = null;
             foreach (Collider collider in ragdoll)
             {
                 collider.enabled = true;
+                if (killer) {
+                    if (closestPart == null ||
+                        (closestPart.transform.position - killer.transform.position).magnitude
+                         > (collider.transform.position - killer.transform.position).magnitude) {
+                        closestPart = collider;
+                    }
+                }
                 collider.gameObject.GetComponent<Rigidbody>().useGravity = true;
                 collider.gameObject.layer = 11;
+            }
+            if (killer)
+            {
+                killer.parent = closestPart.transform;
             }
 
         }
@@ -215,7 +233,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 {
                     if (!spotted)
                     {
-                        die();
+                        die(evt.transform);
                     }
                 }
             }

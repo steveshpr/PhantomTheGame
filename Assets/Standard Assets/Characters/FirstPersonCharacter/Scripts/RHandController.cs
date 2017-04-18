@@ -21,8 +21,8 @@ public class RHandController : MonoBehaviour {
 
     private void OnCollisionEnter(Collision col)
     {
-        
-        if (col.gameObject.layer != 8 && col.gameObject.layer != 9)
+        //enemy or dead body or arrow on ground
+        if (col.gameObject.layer == 10 || col.gameObject.layer == 11 || col.gameObject.layer == 13)
         {
             if (sword.activeSelf)
             {
@@ -40,7 +40,7 @@ public class RHandController : MonoBehaviour {
 
     private void OnCollisionExit(Collision col)
     {
-        if (col.gameObject.layer != 8 && col.gameObject.layer != 9)
+        if (col.gameObject.layer == 10 || col.gameObject.layer == 11 || col.gameObject.layer == 13)
         {
             if (sword.activeSelf)
             {
