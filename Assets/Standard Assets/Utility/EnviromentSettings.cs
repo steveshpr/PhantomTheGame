@@ -4,6 +4,7 @@ using UnityEngine;
 using Phantom.Utility.MessageBus;
 using System;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 
 namespace Phantom.Enviroment
 {
@@ -22,9 +23,19 @@ namespace Phantom.Enviroment
         {
             if (spotted)
             {
+                enemyCount = -1;
                 MainBus.Instance.PublishEvent(new HUDSetText("YOU LOSE"));
                 StartCoroutine("ExecuteAfter", 5f);
             }
+
+            if (CrossPlatformInputManager.GetButton("Menu"))
+            {
+                MainBus.Instance.PublishEvent(new HUDSetText("Remaining: " + enemyCount));
+            }
+            else if (enemyCount > 0) {
+                MainBus.Instance.PublishEvent(new HUDSetText(""));
+            }
+            
         }
 
         private IEnumerator ExecuteAfter(float time)
@@ -46,7 +57,7 @@ namespace Phantom.Enviroment
         public void OnEvent(EnemyDieEvent evt)
         {
             enemyCount--;
-            if (enemyCount <= 0) {
+            if (enemyCount == 0) {
                 MainBus.Instance.PublishEvent(new HUDSetText("YOU WIN"));
             }
         }
