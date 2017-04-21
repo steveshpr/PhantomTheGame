@@ -15,7 +15,8 @@ public class Sword : MonoBehaviour {
     [HideInInspector]public GameObject target = null;
 
     // Use this for initialization
-    void Start () {
+    private void OnEnable()
+    {
         StartCoroutine(CalcVelocity());
     }
 
@@ -24,9 +25,10 @@ public class Sword : MonoBehaviour {
         if (coolDown > 0) {
             coolDown--;
         }
-        if (target != null && speed >= 1f && coolDown == 0) {
+        if (target != null && speed >= 1f && coolDown <= 0) {
             coolDown = 20;
             MainBus.Instance.PublishEvent(new KillEnemy(target));
+            target = null;
         }
     }
 
