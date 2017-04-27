@@ -30,7 +30,7 @@ public class FlyingArrow : MonoBehaviour {
 
     private void OnCollisionStay(Collision col)
     {
-        if (col.gameObject.layer != 12 && col.gameObject.layer !=9) {
+        if (col.gameObject.layer != 12 && col.gameObject.layer !=8) {
             if (active)
             {
                 var rigidBody = gameObject.GetComponent<Rigidbody>();
@@ -42,8 +42,8 @@ public class FlyingArrow : MonoBehaviour {
                 {
                     MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
                 }
-                if (col.gameObject.layer == 8) {
-                    Debug.Log("wa");
+                if (col.gameObject.layer == 9) {
+                    Debug.Log("wall");
                 }
                 enabled = false;
             }
@@ -52,7 +52,7 @@ public class FlyingArrow : MonoBehaviour {
 
     private void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.layer != 12 && col.gameObject.layer != 9)
+        if (col.gameObject.layer != 12 && col.gameObject.layer != 8)
         {
             if (active)
             {
@@ -65,9 +65,9 @@ public class FlyingArrow : MonoBehaviour {
                 {
                     MainBus.Instance.PublishEvent(new KillEnemy(col.gameObject, transform));
                 }
-                if (col.gameObject.layer == 8)
+                if (col.gameObject.layer == 9)
                 {
-                    Debug.Log("wa");
+                    Debug.Log("wall");
                 }
                 enabled = false;
             }
